@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loan default check</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="aurora" aria-hidden="true"></div>
+<main class="shell">
+  <header class="top">
+    <h1>Loan default check</h1>
+    <p>Enter the applicant's details. The model estimates how likely the loan is to default.</p>
+  </header>
+
+  <div class="layout">
+    <form id="form" class="panel form" novalidate>
+      <fieldset>
+        <legend>Applicant</legend>
+        <label>Age<input type="number" id="person_age" min="18" max="100" step="1" required placeholder="30"></label>
+        <label>Yearly income<input type="number" id="person_income" min="1" step="any" required placeholder="50000"></label>
+        <label>Home ownership
+          <select id="person_home_ownership" required>
+            <option value="" disabled selected>Choose one</option>
+            <option value="RENT">Rent</option><option value="OWN">Own</option>
+            <option value="MORTGAGE">Mortgage</option><option value="OTHER">Other</option>
+          </select>
+        </label>
+        <label>Years employed<input type="number" id="person_emp_length" min="0" max="100" step="any" required placeholder="4"></label>
+        <label>Credit history (years)<input type="number" id="cb_person_cred_hist_length" min="0" step="1" required placeholder="5"></label>
+        <div class="field">Past default on file
+          <div class="seg" role="radiogroup" aria-label="Past default on file">
+            <input type="radio" name="cb_person_default_on_file" id="def_n" value="N" checked><label for="def_n">No</label>
+            <input type="radio" name="cb_person_default_on_file" id="def_y" value="Y"><label for="def_y">Yes</label>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Loan</legend>
+        <label>Purpose
+          <select id="loan_intent" required>
+            <option value="" disabled selected>Choose one</option>
+            <option value="PERSONAL">Personal</option><option value="EDUCATION">Education</option>
+            <option value="MEDICAL">Medical</option><option value="VENTURE">Venture</option>
+            <option value="HOMEIMPROVEMENT">Home improvement</option><option value="DEBTCONSOLIDATION">Debt consolidation</option>
+          </select>
+        </label>
+        <label>Loan amount<input type="number" id="loan_amnt" min="1" step="any" required placeholder="10000"></label>
+        <label>Interest rate (%)<input type="number" id="loan_int_rate" min="0.01" step="any" required placeholder="12.5"></label>
+        <label>Loan as share of income
+          <input type="text" id="loan_percent_income" readonly placeholder="Calculated automatically" tabindex="-1">
+        </label>
+        <div class="field wide">Loan grade
+          <div class="seg grades" role="radiogroup" aria-label="Loan grade" id="grades"></div>
+        </div>
+      </fieldset>
+
+      <p id="msg" class="msg" role="alert" hidden></p>
+      <div class="actions">
+        <button type="submit" id="go" class="primary"><span>Check risk</span></button>
+        <button type="button" class="ghost" data-sample="low">Fill low-risk example</button>
+        <button type="button" class="ghost" data-sample="high">Fill high-risk example</button>
+      </div>
+    </form>
+
+    <aside class="panel result" aria-live="polite">
+      <svg viewBox="0 0 240 150" class="gauge" role="img" aria-label="Default risk gauge">
+        <defs>
+          <linearGradient id="grad" gradientUnits="userSpaceOnUse" x1="20" y1="0" x2="220" y2="0">
+            <stop offset="0" stop-color="#1fb5a3"/><stop offset=".5" stop-color="#f2b134"/><stop offset="1" stop-color="#e5484d"/>
+          </linearGradient>
+        </defs>
+        <path d="M20 120 A100 100 0 0 1 220 120" class="track" pathLength="100"/>
+        <path d="M20 120 A100 100 0 0 1 220 120" class="fill" id="arc" pathLength="100" stroke="url(#grad)"/>
+        <line id="tick" class="tick" x1="0" y1="0" x2="0" y2="0" opacity="0"/>
+        <g id="needle" class="needle"><line x1="120" y1="120" x2="120" y2="40"/><circle cx="120" cy="120" r="7"/></g>
+      </svg>
+      <div class="readout">
+        <div class="num"><span id="pct">--</span><small>%</small></div>
+        <div id="verdict" class="verdict">Waiting for details</div>
+        <p id="note" class="note">Fill in the form and press Check risk.</p>
+      </div>
+    </aside>
+  </div>
+</main>
+<script src="script.js"></script>
+</body>
+</html>
